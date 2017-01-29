@@ -1,3 +1,15 @@
+<!-- TOC -->
+
+- [Union-Find](#union-find)
+    - [Dinamic connectivity](#dinamic-connectivity)
+        - [Ex: applications:](#ex-applications)
+    - [quick find](#quick-find)
+    - [quick union](#quick-union)
+    - [improvements](#improvements)
+    - [applications](#applications)
+
+<!-- /TOC -->
+
 ## Union-Find
 
 ### Dinamic connectivity
@@ -46,7 +58,7 @@ public class QuickFindUF
     {
         int pid = id[p];
         int qid = id[q];
-        for (int i = 0; i < id.lenght; i++)
+        for (int i = 0; i < id.length; i++)
         {
             if(id[i] == pid) id[i] = qid;
         }
@@ -57,7 +69,69 @@ public class QuickFindUF
 ### quick find
 
 ### quick union
+
+- Each element of id 
+
+```java
+public class QuickFindUF
+{
+    private int[] id;
+
+    public QuickFindUF(int N)
+    {
+        id = new int[N];
+        for(int i = 0; i < N; i++)
+        {
+            // set id element of each object to itself
+            // ( N Array accesses )
+            id[i] = i;
+        }
+    }
+
+    private int root(int i)
+    {
+        // chase parent pointers until reach root
+        // ( depth of i array accesses)
+        while(i != id[i]) i = id[i];
+        return i;
+    }
+    
+    public boolean connected(int p, int q)
+    {
+        // check if p and q have same root
+        // (depth of p and q array accesses)
+        return root(p) == root(q);    
+    }
+    
+    public void union(int p, int q)
+    {
+        // change root of p to point to root of q
+        // (depth of p and q array accesses)
+        int i = root(p);
+        int j = root(q);
+        id[i] = j;
+    } 
+}
+```
+
 ### improvements
+
+**Improvement 1:**
+Weghted quick-union.
+ - Modify quick-union to avoid tall trees.
+ - Keep track of size of each tree (number of objects).
+ - Balance by linking root of smaller tree to root of larger tree.
+Avoid putting the large tree lower
+
+
+Algorithm | initialize | Union  |   Connected
+----------|------------|--------|-------------
+ quick-find  | N | N | 1
+ quick-union | N | N*| N
+ weighted QU | N | **lg N** * | lg N
+
+* including cost of finfing roots
+
 ### applications
 
  
